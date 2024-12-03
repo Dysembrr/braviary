@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+-- Local Functions
+--------------------------------------------------------------------------------
+
+local function window_resized(self, event, data)
+	if event == window.WINDOW_EVENT_RESIZED then
+		local sprite_url = msg.url(nil, nil, "sprite")
+		local sprite_size = vmath.vector3(data.width, data.height, 0)
+		go.set(sprite_url, "size", sprite_size)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Lifecycle Functions
+--------------------------------------------------------------------------------
+
+function init(self)
+	window.set_listener(window_resized)
+end

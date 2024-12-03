@@ -1,0 +1,30 @@
+--------------------------------------------------------------------------------
+-- Dependencies
+--------------------------------------------------------------------------------
+
+local m_braviary = require "braviary.braviary"
+
+--------------------------------------------------------------------------------
+-- Properties
+--------------------------------------------------------------------------------
+
+go.property("behavior", hash("center"))
+go.property("viewport_x", 0)
+go.property("viewport_y", 0)
+go.property("viewport_width", 960)
+go.property("viewport_height", 640)
+go.property("near", -1)
+go.property("far", 1)
+go.property("zoom", 1)
+
+--------------------------------------------------------------------------------
+-- Lifecycle Functions
+--------------------------------------------------------------------------------
+
+function init(self)
+	m_braviary.create(go.get_id())
+end
+
+function final(self)
+	m_braviary.destroy(go.get_id())
+end

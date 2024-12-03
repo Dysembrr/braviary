@@ -1,0 +1,11 @@
+default_animation: "canvas"
+material: "/example/materials/canvas.material"
+size {
+  x: 960.0
+  y: 640.0
+}
+size_mode: SIZE_MODE_MANUAL
+textures {
+  sampler: "albedo_sampler"
+  texture: "/example/atlases/canvas.atlas"
+}

@@ -1,0 +1,96 @@
+--------------------------------------------------------------------------------
+-- Dependencies
+--------------------------------------------------------------------------------
+
+local m_braviary = require "braviary.braviary"
+
+--------------------------------------------------------------------------------
+-- Local Variables
+--------------------------------------------------------------------------------
+
+local g_msg_window_resized = hash("window_resized")
+
+local g_predicates =
+{
+	tile =
+	{
+		handle = nil,
+		tags = { hash("tile") }
+	},
+	canvas =
+	{
+		handle = nil,
+		tags = { hash("canvas") }
+	}
+}
+
+local g_targets =
+{
+	canvas =
+	{
+		handle = hash("canvas"),
+		clear =
+		{
+			[graphics.BUFFER_TYPE_COLOR0_BIT] = vmath.vector4(0.1, 0.1, 0.1, 0),
+		}
+	},
+	default =
+	{
+		handle = render.RENDER_TARGET_DEFAULT,
+		clear =
+		{
+			[graphics.BUFFER_TYPE_COLOR0_BIT] = vmath.vector4(),
+			[graphics.BUFFER_TYPE_DEPTH_BIT] = 1,
+			[graphics.BUFFER_TYPE_STENCIL_BIT] = 0
+		}
+	}
+}
+
+--------------------------------------------------------------------------------
+-- Local Functions
+--------------------------------------------------------------------------------
+
+local function create_predicates()
+	for _, predicate in pairs(g_predicates) do
+		predicate.handle = render.predicate(predicate.tags)
+	end
+end
+
+local function resize_targets()
+	local window_width, window_height = render.get_window_width(), render.get_window_height()
+	render.set_render_target_size(hash("canvas"), window_width, window_height)
+end
+
+--------------------------------------------------------------------------------
+-- Lifecycle Functions
+--------------------------------------------------------------------------------
+
+function init(self)
+	create_predicates()
+end
+
+function update(self, dt)
+	render.set_blend_func(graphics.BLEND_FACTOR_SRC_ALPHA, graphics.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA)
+	
+	local frustum_game = m_braviary.activate(hash("/braviary_game"))
+	render.set_render_target(g_targets.canvas.handle)
+	render.clear(g_targets.canvas.clear)
+	render.enable_state(graphics.STATE_BLEND)
+	render.draw(g_predicates.tile.handle, { frustum = frustum_game })
+	render.disable_state(graphics.STATE_BLEND)
+	
+	local frustum_canvas = m_braviary.activate(hash("/braviary_canvas"))
+	render.set_render_target(g_targets.default.handle)
+	render.clear(g_targets.default.clear)
+	render.enable_state(graphics.STATE_BLEND)
+	render.enable_texture(0, g_targets.canvas.handle)
+	render.draw(g_predicates.canvas.handle, { frustum = frustum_canvas })
+	render.disable_texture(0)
+	render.disable_state(graphics.STATE_BLEND)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == g_msg_window_resized then
+		resize_targets()
+	end
+end

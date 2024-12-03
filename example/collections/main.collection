@@ -1,0 +1,42 @@
+name: "main"
+instances {
+  id: "braviary_game"
+  prototype: "/braviary/braviary.go"
+  position {
+    x: 480.0
+    y: 320.0
+  }
+}
+instances {
+  id: "canvas"
+  prototype: "/example/objects/canvas.go"
+  position {
+    x: 480.0
+    y: 320.0
+  }
+}
+instances {
+  id: "logo"
+  prototype: "/example/objects/logo.go"
+  position {
+    x: 480.0
+    y: 320.0
+  }
+}
+instances {
+  id: "braviary_canvas"
+  prototype: "/braviary/braviary.go"
+  position {
+    x: 480.0
+    y: 320.0
+  }
+  component_properties {
+    id: "script"
+    properties {
+      id: "behavior"
+      value: "expand"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+scale_along_z: 0
