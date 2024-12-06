@@ -1,4 +1,4 @@
-script: "/braviary/braviary.render_script"
+script: "/example/scripts/render.render_script"
 render_resources {
   name: "canvas"
   path: "/example/targets/canvas.render_target"
